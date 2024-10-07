@@ -1,20 +1,11 @@
 import { ApolloServer } from 'apollo-server-micro';
 import { schema } from '@/graphql/schema';
 import { PrismaClient } from '@prisma/client';
+import { NextApiRequest, NextApiResponse } from 'next';
 
 const prisma = new PrismaClient();
-let apolloServer: ApolloServer;
-let isServerStarted = false;
 
-const createServer = () => {
-  if (!apolloServer) {
-    apolloServer = new ApolloServer({
-      schema,
-      context: () => ({ prisma }),
-    });
-  }
-  return apolloServer;
-};
+let apolloServer: ApolloServer | null = null;
 
 export const config = {
   api: {
@@ -22,18 +13,26 @@ export const config = {
   },
 };
 
-// Manejador de solicitudes GraphQL
-const handler = async (req: any, res: any) => {
-  const server = createServer();
-
-  // Iniciar el servidor si no está ya iniciado
-  if (!isServerStarted) {
-    await server.start();
-    isServerStarted = true;
+const getApolloServer = async () => {
+  if (!apolloServer) {
+    apolloServer = new ApolloServer({
+      schema,
+      context: () => ({ prisma }),
+    });
+    await apolloServer.start();
   }
+  return apolloServer;
+};
 
-  // Manejar la solicitud con Apollo
-  return server.createHandler({ path: '/api/graphql' })(req, res);
-}
+// Manejador de solicitudes GraphQL
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  try {
+    const server = await getApolloServer();
+    return server.createHandler({ path: '/api/graphql' })(req, res);
+  } catch (error) {
+    console.error('Error handling the request', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
 
 export default handler;
