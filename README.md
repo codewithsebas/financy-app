@@ -3,6 +3,18 @@
 
 Financy-App es un sistema de ingresos/gastos desarrollado con Next.js 14, utilizando Supabase, GraphQL y Axios para la gestión de APIs. Permite a los usuarios con rol de administrador registrarse, iniciar sesión, gestionar sus gastos e ingresos, añadir nuevas entradas de gastos e ingresos, gestionar usuarios (editar el rol del usuario) y descargar un informe de sus transacciones. Para los usuarios con el rol estándar de Usuario, les permite ver la gestión de sus ingresos y gastos.
 
+## Indicaciones para ingresar
+Email para ingresar como Admin
+
+ - email: admin@prevalentware.com
+
+ - password: Ab-12345678
+
+Para ingresar como User
+
+  - Ingresa con cualquier usuario, Google, Github o crea una cuenta en Auth0
+
+
 # Despliegue y Diseño
 
 - Link de despliegue en **Vercel**: [Financy App](https://financyy-app.vercel.app/)
