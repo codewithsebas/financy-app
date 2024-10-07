@@ -14,7 +14,7 @@ export const useAuth = () => {
 
       // Se realiza la obtencion del rol del usuario autenticado por medio de la API de AUTH0
       try {
-        const response = await axios.get<Role[]>(`${process.env.NEXT_PUBLIC_AUTH0_ISSUER_BASE_URL}/api/v2/users/${user?.sub}/roles`, {
+        const response = await axios.get<Role[]>(`${process.env.AUTH0_ISSUER_BASE_URL}/api/v2/users/${user?.sub}/roles`, {
           headers: {
             Authorization: `Bearer ${process.env.NEXT_PUBLIC_MGMT_API_ACCESS_TOKEN}`,
           },
