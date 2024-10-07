@@ -1,9 +1,8 @@
-// graphql/schema.ts
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { gql } from 'apollo-server-micro';
-import resolvers from './resolvers/resolver'; // Asegúrate de que la ruta sea correcta
+import resolvers from './resolvers/resolver';
 
-// Definir esquemas GraphQL
+// Esquema GraphQL
 const typeDefs = gql`
   type User {
     id: ID!
@@ -33,7 +32,6 @@ const typeDefs = gql`
   }
 `;
 
-// Exportar el esquema
 export const schema = makeExecutableSchema({
   typeDefs,
   resolvers,

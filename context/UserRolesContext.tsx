@@ -1,16 +1,5 @@
-// context/UserRolesContext.tsx
+import { Role, UserRolesContextType } from '@/types/userRolesContext';
 import React, { createContext, useContext, useState } from 'react';
-
-interface Role {
-  id: string;
-  name: string;
-  description: string;
-}
-
-interface UserRolesContextType {
-  roles: Role[] | null;
-  setRoles: React.Dispatch<React.SetStateAction<Role[] | null>>;
-}
 
 const UserRolesContext = createContext<UserRolesContextType | undefined>(undefined);
 
@@ -27,7 +16,7 @@ export const UserRolesProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 export const useUserRoles = () => {
   const context = useContext(UserRolesContext);
   if (context === undefined) {
-    throw new Error('useUserRoles must be used within a UserRolesProvider');
+    throw new Error('useUserRoles debe utilizarse dentro de un UserRolesProvider');
   }
   return context;
 };

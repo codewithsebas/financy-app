@@ -9,32 +9,60 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 import { LoaderCircle } from "lucide-react";
-import { ModalEditProps } from "@/types/modalEdit";
+import { ErrorState, ModalEditProps } from "@/types/modalEdit";
 
-export function ModalEdit({ onSave, initialId, initialName, initialRole, open, setOpen, loadingEdit, setLoadingEdit }: ModalEditProps) {
+export function ModalEdit({
+    onSave,
+    initialId,
+    initialName,
+    initialRole,
+    open,
+    setOpen,
+    loadingEdit,
+    setLoadingEdit
+}: ModalEditProps) {
     const [name, setName] = useState(initialName);
     const [role, setRole] = useState(initialRole);
+    const [errors, setErrors] = useState<ErrorState>({});
 
     useEffect(() => {
         if (open) {
             setName(initialName);
             setRole(initialRole);
+            setErrors({});
         }
     }, [open, initialName, initialRole]);
 
-    const handleSave = () => {
-        setLoadingEdit(true)
+    const validateForm = useCallback((): ErrorState => {
+        const newErrors: ErrorState = {};
+        if (!name) {
+            newErrors.name = "El nombre es obligatorio.";
+        }
+        if (!role) {
+            newErrors.role = "El rol es obligatorio.";
+        }
+        return newErrors;
+    }, [name, role]);
+
+    // Funcion para guardar, que incluye la validación
+    const handleSave = useCallback(() => {
+        const validationErrors = validateForm();
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+            return;
+        }
+        setLoadingEdit(true);
         onSave(initialId, name, role);
-    };
+    }, [validateForm, onSave, initialId, name, role, setLoadingEdit]);
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
@@ -53,7 +81,10 @@ export function ModalEdit({ onSave, initialId, initialName, initialRole, open, s
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             className="w-full"
+                            aria-invalid={!!errors.name}
+                            aria-describedby="name-error"
                         />
+                        {errors.name && <p id="name-error" className="text-red-500 text-sm">{errors.name}</p>}
                     </div>
                     <div className="flex flex-col gap-1 items-start">
                         <Label htmlFor="role" className="text-right">
@@ -68,7 +99,7 @@ export function ModalEdit({ onSave, initialId, initialName, initialRole, open, s
                                 <SelectItem value="admin">Admin</SelectItem>
                             </SelectContent>
                         </Select>
-
+                        {errors.role && <p id="role-error" className="text-red-500 text-sm">{errors.role}</p>}
                     </div>
                 </div>
                 <DialogFooter>

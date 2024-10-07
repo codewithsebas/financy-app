@@ -14,31 +14,27 @@ import { useMutation, useQuery } from '@apollo/client';
 import { GET_MOVEMENTS } from '@/graphql/queries/queries';
 import { Movement } from '@/types/movement';
 import { formatBalance } from '@/utils/formatBalance';
-import { ADD_MOVEMENT } from '@/graphql/mutations';
+import { ADD_MOVEMENT } from '@/graphql/mutation/mutations';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { useAuth } from '@/hooks/useAuth';
 import { LoaderCircle } from 'lucide-react';
 import Head from 'next/head';
 
 const Dashboard = () => {
-  const { user, isLoading } = useUser();
+  const { user } = useUser();
   const { roles } = useAuth();
-
+  const [open, setOpen] = useState(false);
+  const [loadingEdit, setLoadingEdit] = useState(false);
   const role = roles?.[0]?.name;
-
   const { data, loading, error } = useQuery(GET_MOVEMENTS, {
     skip: !user,
   });
-
   const [addMovement] = useMutation(ADD_MOVEMENT, {
     refetchQueries: [GET_MOVEMENTS],
     onError: (error) => {
       console.error("Error creando el movimiento:", error);
     },
   });
-
-  const [open, setOpen] = useState(false);
-  const [loadingEdit, setLoadingEdit] = useState(false);
 
   interface Amount {
     amount: string;
@@ -68,8 +64,6 @@ const Dashboard = () => {
       setLoadingEdit(false);
     }
   };
-
-  <title>Page Title</title>
 
   return (
     <DashboardLayout>
@@ -112,9 +106,9 @@ const Dashboard = () => {
             ))}
           </TableBody>
         </Table>
-        {!data || data?.movements?.length === 0 && <p className='w-full my-5'>No hay usuarios disponibles.</p>}
-        {loading && <div className='w-full flex flex-col gap-2 items-center justify-center  my-5'>Cargando usuarios... <LoaderCircle size={20} className="animate-spin" /></div>}
-        {error && <p className='w-full my-5'>Error al cargar los usuarios: <b>{error.message}</b></p>}
+        {!data || data?.movements?.length === 0 && <p className='w-full my-5'>No hay movimientos disponibles.</p>}
+        {loading && <div className='w-full flex flex-col gap-2 items-center justify-center  my-5'>Cargando movimientos... <LoaderCircle size={20} className="animate-spin" /></div>}
+        {error && <p className='w-full my-5'>Error al cargar los movimientos: <b>{error.message}</b></p>}
       </div>
     </DashboardLayout>
   );

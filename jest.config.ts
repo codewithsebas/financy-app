@@ -9,10 +9,11 @@ const config: Config = {
   coverageProvider: 'v8',
   testEnvironment: 'jsdom',
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
-  preset: 'ts-jest',
   moduleNameMapper: {
-    // Mapea el alias @ a la raíz del proyecto
     '^@/(.*)$': '<rootDir>/$1',
+  },
+  transform: {
+    '^.+\\.(ts|tsx)$': 'ts-jest',
   },
 };
 

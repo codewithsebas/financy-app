@@ -2,6 +2,8 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+// Crea usuarios y movimientos de prueba
+
 const main = async () => {
   const users = [
     { name: 'User 1', email: 'user1@example.com', phone: '1234567890', role: 'admin' },
@@ -16,29 +18,27 @@ const main = async () => {
     { name: 'User 10', email: 'user10@example.com', phone: '1234567899', role: 'user', },
   ];
 
-  // Crear los usuarios
   for (const user of users) {
     const createdUser = await prisma.user.create({
       data: user,
     });
 
-    // Crear 3 ingresos y 3 gastos por cada usuario
     for (let i = 0; i < 3; i++) {
       await prisma.movements.create({
         data: {
           concept: `Income Concept ${i + 1}`,
-          amount: Math.floor(Math.random() * 1000) + 1, // Cantidad aleatoria entre 1 y 1000
+          amount: Math.floor(Math.random() * 1000) + 1,
           date: new Date(),
-          userId: createdUser.id, // Relacionar el ingreso con el usuario
+          userId: createdUser.id,
         },
       });
 
       await prisma.movements.create({
         data: {
           concept: `Expense Concept ${i + 1}`,
-          amount: Math.floor(Math.random() * 500) + 1, // Cantidad aleatoria entre 1 y 500
+          amount: Math.floor(Math.random() * 500) + 1,
           date: new Date(),
-          userId: createdUser.id, // Relacionar el gasto con el usuario
+          userId: createdUser.id,
         },
       });
     }

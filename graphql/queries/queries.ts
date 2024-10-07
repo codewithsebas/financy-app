@@ -1,5 +1,6 @@
 import { gql } from '@apollo/client';
 
+// Querie para obtener todos los usuarios
 export const GET_USERS = gql`
   query GetUsers {
     users {
@@ -12,6 +13,7 @@ export const GET_USERS = gql`
   }
 `;
 
+// Querie para obtener todos los movimientos
 export const GET_MOVEMENTS = gql`
   query GetMovements {
     movements {

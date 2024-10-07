@@ -1,5 +1,4 @@
 "use client"
-
 import React, { useState } from 'react';
 import { useQuery, gql, useMutation } from '@apollo/client';
 import DashboardLayout from '@/components/DashboardLayout';
@@ -8,13 +7,12 @@ import { LoaderCircle, Pencil } from 'lucide-react';
 import { User } from '@/types/user';
 import { ModalEdit } from '@/components/modals/ModalEdit';
 import { GET_USERS } from '@/graphql/queries/queries';
-import { UPDATE_USER } from '@/graphql/mutations';
+import { UPDATE_USER } from '@/graphql/mutation/mutations';
 import Head from 'next/head';
 
 const Users = () => {
     const { data, loading, error } = useQuery(GET_USERS);
     const [updateUser] = useMutation(UPDATE_USER);
-
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
     const [open, setOpen] = useState(false);
     const [loadingEdit, setLoadingEdit] = useState(false);

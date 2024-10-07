@@ -1,3 +1,4 @@
+// Formateo de moneda a pesos colombianos
 export const formatBalance = (value: number) => {
     return new Intl.NumberFormat('es-CO', {
       style: 'currency',

@@ -18,8 +18,8 @@ import { formatBalance } from '@/utils/formatBalance';
 import { format } from 'date-fns';
 
 const Reports = () => {
-  const { user, isLoading } = useUser();
-  const { data, loading, error } = useQuery(GET_MOVEMENTS, {
+  const { user } = useUser();
+  const { data, loading } = useQuery(GET_MOVEMENTS, {
     skip: !user,
   });
 
@@ -59,16 +59,14 @@ const Reports = () => {
               <h3 className="font-semibold text-xl">Saldo actual</h3>
               <p className='text-sm text-colorBlack/50'>Monto total del saldo</p>
             </div>
-
             <h1 className='text-3xl font-semibold'>{formatBalance(totalAmount)}</h1>
           </div>
-
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger>
                 <CSVLink
                   className="flex items-center gap-3 text-sm px-4 py-2 rounded-md text-white bg-black hover:bg-black/85 duration-200"
-                  data={csvData}  // Usar los datos formateados
+                  data={csvData}
                   headers={csvHeaders}
                   filename="reporte_financiero.csv"
                 >
@@ -80,7 +78,6 @@ const Reports = () => {
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
-
         </div>
         <StackedBarChart data={data.movements} />
       </div>

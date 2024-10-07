@@ -14,12 +14,16 @@ const DashboardLayout = ({ children }: Readonly<{
     const { user, error, isLoading } = useUser();
     const { roles } = useAuth();
     const role = roles?.[0]?.name;
+
+    // Redirigimos a la pantalla de login si no existe usuario autenticado
     useEffect(() => {
         if (!isLoading && !user) {
             router.push('/');
         }
     }, [user, isLoading, router]);
 
+
+    // Se muestra pantalla de carga, al momento de iniciar
     if (isLoading) {
         return (
             <main className="w-full h-screen flex flex-col gap-5 items-center justify-center text-xl">
@@ -28,19 +32,23 @@ const DashboardLayout = ({ children }: Readonly<{
         );
     }
 
+    // Se muestra pantalla de error si ocurre algun error con el inicio de sesion
     if (error) return (
         <main className="w-full h-screen flex flex-col gap-3 items-center justify-center">
             {error.message} <Frown size={20} />
         </main>
     );
 
+     // Se evita error de undefined, y se redirige 
     if (!user) {
-        return null; // Esto evita renderizar cualquier cosa mientras ocurre la redirección
+        return null;
     }
 
     return (
         <div className="w-full h-screen flex">
+            {/* Navbar de navegacion */}
             <Navbar role={role} />
+            {/* Barra de bienvenida y usuario autenticado */}
             <main className='w-full p-5'>
                 <aside className='flex items-center gap-3 border-b p-2 pt-0 pb-4 w-full'>
                     <div className='w-10 h-10 flex items-center justify-center bg-black rounded-sm text-white'>
@@ -51,6 +59,7 @@ const DashboardLayout = ({ children }: Readonly<{
                         <p className="font-light text-sm">Bienvenido de vuelta</p>
                     </div>
                 </aside>
+                {/* Diferente informacion dependiendo de la pantalla en la que este */}
                 <div className='my-5 flex flex-col gap-5'>
                     {children}
                 </div>

@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation';
 import { ChartNoAxesCombined, ChevronRight, Grid2X2, LogOut, UserCog } from 'lucide-react';
 import { NavbarProps, NavItemProps } from '@/types/navbar';
 
+// Logica de links del Navbar para mejorar la legibilidad
 const NavItem: React.FC<NavItemProps> = ({ href, label, icon, isActive, activeNav }) => (
     <li className={`rounded-lg w-full flex items-center justify-start gap-2 duration-150 ${isActive ? 'bg-slate-50' : 'bg-white hover:bg-slate-100'}`}>
         <Link href={href} className={`w-full flex items-center justify-between ${activeNav ? ' py-2 px-3  duration-300' : 'py-2 px-2 ps-2.5  duration-300'}`}>
@@ -18,6 +19,7 @@ const NavItem: React.FC<NavItemProps> = ({ href, label, icon, isActive, activeNa
     </li>
 );
 
+// Componente Navbar, que obtiene el role y realiza la verificacion de links a mostrar
 const Navbar:  React.FC<NavbarProps>  = ({ role }) => {
     const pathname = usePathname();
     const [activeNav, setActiveNav] = useState(true);

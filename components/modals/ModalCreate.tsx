@@ -11,28 +11,84 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LoaderCircle, Plus } from "lucide-react";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { DatePicker } from "../DatePicker";
 import { format } from "date-fns";
-import { ModalCreateProps } from "@/types/modalCreate";
+import { ErrorState, ModalCreateProps } from "@/types/modalCreate";
 
 export function ModalCreate({
   onSave,
-  open, setOpen, loadingEdit, setLoadingEdit
+  open,
+  setOpen,
+  loadingEdit,
+  setLoadingEdit
 }: ModalCreateProps) {
-  const [amount, setAmount] = useState("");
-  const [concept, setConcept] = useState("");
-  const [date, setDate] = useState<string>("");
+  const [formData, setFormData] = useState({
+    amount: "",
+    concept: "",
+    date: "",
+  });
+  const [errors, setErrors] = useState<ErrorState>({});
 
-  const handleSave = () => {
-    setLoadingEdit(true)
-    onSave(amount, concept, date);
-  };
+  // Funcion para validar los campos
+  const validateForm = useCallback((): ErrorState => {
+    const newErrors: ErrorState = {};
 
-  const handleDateChange = (date: Date) => {
-    
-    setDate(format(date, "yyyy-MM-dd"));
-  };
+    if (!formData.amount) {
+      newErrors.amount = "El monto es obligatorio.";
+    }
+    if (!formData.concept) {
+      newErrors.concept = "El concepto es obligatorio.";
+    }
+    if (!formData.date) {
+      newErrors.date = "La fecha es obligatoria.";
+    }
+
+    return newErrors;
+  }, [formData]);
+
+  // Función para manejar la validacion y el guardado
+  const handleSave = useCallback(() => {
+    const validationErrors = validateForm();
+
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return; // Si hay errores, no dejara enviar
+    }
+
+    setLoadingEdit(true);
+    onSave(formData.amount, formData.concept, formData.date);
+  }, [validateForm, formData, onSave, setLoadingEdit]);
+
+  // Funcion para manejar cambios en los campos de entrada
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { id, value } = e.target;
+      setFormData((prevData) => ({
+        ...prevData,
+        [id]: value,
+      }));
+
+      // Limpiar errores del campo modificado
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [id]: undefined,
+      }));
+    },
+    []
+  );
+
+  // Funcion para manejar el cambio de fecha
+  const handleDateChange = useCallback((date: Date) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      date: format(date, "yyyy-MM-dd"),
+    }));
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      date: undefined,
+    }));
+  }, []);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -53,11 +109,14 @@ export function ModalCreate({
             </Label>
             <Input
               id="amount"
-              value={amount}
+              value={formData.amount}
               type="number"
-              onChange={(e) => setAmount(e.target.value)}
+              onChange={handleInputChange}
               className="w-full"
+              aria-invalid={!!errors.amount}
+              aria-describedby="amount-error"
             />
+            {errors.amount && <p id="amount-error" className="text-red-500 text-sm">{errors.amount}</p>}
           </div>
           <div className="flex flex-col gap-1 items-start">
             <Label htmlFor="concept" className="text-right">
@@ -65,16 +124,20 @@ export function ModalCreate({
             </Label>
             <Input
               id="concept"
-              value={concept}
-              onChange={(e) => setConcept(e.target.value)}
+              value={formData.concept}
+              onChange={handleInputChange}
               className="w-full"
+              aria-invalid={!!errors.concept}
+              aria-describedby="concept-error"
             />
+            {errors.concept && <p id="concept-error" className="text-red-500 text-sm">{errors.concept}</p>}
           </div>
           <div className="flex flex-col gap-1 items-start">
             <Label htmlFor="date" className="text-right">
               Fecha
             </Label>
             <DatePicker onChange={handleDateChange} />
+            {errors.date && <p id="date-error" className="text-red-500 text-sm">{errors.date}</p>}
           </div>
         </div>
         <DialogFooter>

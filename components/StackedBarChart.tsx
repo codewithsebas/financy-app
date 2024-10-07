@@ -11,19 +11,12 @@ import {
   Legend,
 } from 'chart.js';
 import { format } from 'date-fns';
+import { StackedBarChartProps } from '@/types/stackedBarChart';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-interface FinancialData {
-  date: string;
-  amount: number;
-}
-
-interface StackedBarChartProps {
-  data: FinancialData[];
-}
-
 const StackedBarChart: React.FC<StackedBarChartProps> = ({ data }) => {
+  // Configuracion de la interfas de colores, data renderizada y hover label
   const chartData = {
     labels: data.map((item) => format(new Date(Number(item.date)), 'dd/MM/yyyy')),
     datasets: [
@@ -35,6 +28,7 @@ const StackedBarChart: React.FC<StackedBarChartProps> = ({ data }) => {
     ]
   };
 
+  // Configuracion del responsive y posicion
   const options = {
     responsive: true,
     plugins: {
