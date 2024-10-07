@@ -93,7 +93,7 @@ export function ModalCreate({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="flex gap-3 items-center shadow">
+        <Button className="flex gap-3 items-center shadow bg-emerald-500 hover:bg-emerald-600/70">
           Nuevo <Plus size={20} />
         </Button>
       </DialogTrigger>
@@ -141,7 +141,7 @@ export function ModalCreate({
           </div>
         </div>
         <DialogFooter>
-          <Button type="button" onClick={handleSave}>
+          <Button type="button" onClick={handleSave} className="bg-emerald-500 hover:bg-emerald-600/70">
             {loadingEdit ? (<LoaderCircle size={20} className="animate-spin" />) : 'Guardar'}
           </Button>
         </DialogFooter>

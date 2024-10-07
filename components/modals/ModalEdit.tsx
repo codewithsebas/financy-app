@@ -103,7 +103,7 @@ export function ModalEdit({
                     </div>
                 </div>
                 <DialogFooter>
-                    <Button type="button" onClick={handleSave}>
+                    <Button type="button" onClick={handleSave} className="bg-emerald-500 hover:bg-emerald-600/70">
                         {loadingEdit ? (<LoaderCircle size={20} className="animate-spin" />) : 'Guardar'}
                     </Button>
                 </DialogFooter>

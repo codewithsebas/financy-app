@@ -65,7 +65,7 @@ const Reports = () => {
             <Tooltip>
               <TooltipTrigger>
                 <CSVLink
-                  className="flex items-center gap-3 text-sm px-4 py-2 rounded-md text-white bg-black hover:bg-black/85 duration-200"
+                  className="flex items-center gap-3 text-sm px-4 py-2 rounded-md text-white bg-emerald-500 hover:bg-emerald-600/70 duration-200"
                   data={csvData}
                   headers={csvHeaders}
                   filename="reporte_financiero.csv"
@@ -73,7 +73,7 @@ const Reports = () => {
                   Generar <FileDown size={18} />
                 </CSVLink>
               </TooltipTrigger>
-              <TooltipContent>
+              <TooltipContent className='bg-emerald-600/50'>
                 Descargar reporte
               </TooltipContent>
             </Tooltip>

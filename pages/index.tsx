@@ -38,7 +38,7 @@ export default function Home() {
             </Button>
 
             <Button variant="secondary" className="py-5 w-full font-medium text-lg border border-colorGrayWhite">
-              <Link target="_blank" href="https://github.com/codewithsebas/financy_app" className="w-full flex justify-center items-center gap-3">Repositorio <Github size={20} /></Link>
+              <Link target="_blank" href="https://github.com/codewithsebas/financy-app" className="w-full flex justify-center items-center gap-3">Repositorio <Github size={20} /></Link>
             </Button>
           </div>
         </div>
